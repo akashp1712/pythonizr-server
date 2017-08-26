@@ -15,8 +15,8 @@ from boilerplate_templates.license_templates import mit_license_template, \
 app = Flask(__name__)
 
 
-# Methods to add respective files
-# Basic files
+
+# `setup_py` adds a setup.py file with a sample project
 def setup_py(zip_file):
     zip_file.writestr('setup.py', setup_py_template)
 
@@ -26,19 +26,21 @@ def setup_py(zip_file):
     zip_file.writestr('tests/test_basic.py', test_basic_template)
 
 
+# `readme_str` adds a sample README.str file
 def readme_rst(zip_file):
     zip_file.writestr('README.rst', readme_rst_template)
 
 
+# `requirements_txt` adds an empty requirements.txt file
 def requirements_txt(zip_file):
     # empty file
     zip_file.writestr('requirements.txt', '')
 
 
+# `manifest_in` adds a MANIFEST.in file for the sample project
 def manifest_in(zip_file):
     manifest_content = ''
 
-    # build manifest content according to arguments
     global is_license
     if is_license:
         manifest_content += 'include LICENSE.txt'
@@ -46,12 +48,13 @@ def manifest_in(zip_file):
     zip_file.writestr('MANIFEST.in', manifest_content)
 
 
+# `main_py` adds a main.py file with basic boilerplate
 def main_py(zip_file):
     zip_file.writestr('main.py', main_py_template)
 
 
-# Helper files
 
+# `gitignore` adds a .gitignore file for git based python repo
 def gitignore(zip_file):
     zip_file.writestr('.gitignore', gitignore_template)
 
@@ -66,17 +69,21 @@ def arg_parse(zip_file):
     zip_file.writestr('argparse_helper.py', arg_parse_template)
 
 
-# LICENSE files
+
 def mit_license(zip_file):
-    zip_file.writestr('LICENSE.txt', mit_license_template.format(datetime.now().year))
+    zip_file.writestr('LICENSE.txt',
+                      mit_license_template.format(datetime.now().year))
 
 
 def apache_license(zip_file):
-    zip_file.writestr('LICENSE.txt', apache_license_template.format(datetime.now().year))
+    zip_file.writestr('LICENSE.txt',
+                      apache_license_template.format(datetime.now().year))
 
 
+# `gnu_license` adds GNU GPLv3 License in LICENSE.txt file
 def gnu_license(zip_file):
-    zip_file.writestr('LICENSE.txt', gnu_license_template.format(datetime.now().year))
+    zip_file.writestr('LICENSE.txt',
+                      gnu_license_template.format(datetime.now().year))
 
 
 def empty_license(zip_file):
@@ -84,6 +91,8 @@ def empty_license(zip_file):
 
 
 # REST Service methods
+
+# handle undefined routes
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': str(error)}), 404)
@@ -94,7 +103,9 @@ def builder():
     global func
     global is_license
 
+    # Initializing StringIO object
     in_memory_output_file = StringIO()
+
     zip_file = ZipFile(in_memory_output_file, 'w')
 
     # Check if license.txt file is requested
@@ -107,6 +118,7 @@ def builder():
 
     if in_memory_output_file.len == 0:
         # no file to pack
+        zip_file.close()
         return not_found("No file to pack")
 
     zip_file.close()
@@ -118,19 +130,20 @@ def builder():
                         'Content-Disposition': 'attachment;filename=sample.zip'
                     })
 
-# dictionary to hold function wrt GET arguments
+'''
+A Dictionary to hold function wrt GET arguments, 
+each function takes ZipFile object as arguments and adds files/dir in it.
+'''
 func = {'main_py': main_py, 'setup_py': setup_py, 'readme_rst': readme_rst,
-            'requirements_txt': requirements_txt, 'manifest_in': manifest_in,
-            'gitignore': gitignore, 'config_handler': config_handler,
-            'argparse': arg_parse,
-            'mit_license': mit_license, 'apache_license': apache_license,
-            'gnu_license': gnu_license, 'empty_license': empty_license}
+        'requirements_txt': requirements_txt, 'manifest_in': manifest_in,
+        'gitignore': gitignore, 'config_handler': config_handler,
+        'argparse': arg_parse,
+        'mit_license': mit_license, 'apache_license': apache_license,
+        'gnu_license': gnu_license, 'empty_license': empty_license}
 
 is_license = False
 
 if __name__ == '__main__':
-
     app.run(
-        host="localhost",
-        debug=True
+        host="localhost"
     )
