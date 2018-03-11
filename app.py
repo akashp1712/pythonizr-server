@@ -1,19 +1,12 @@
 from StringIO import StringIO
-from datetime import datetime
 from zipfile import ZipFile
 
 from flask import Flask, Response, request, jsonify, make_response
 
-from boilerplate_templates.basic_templates import readme_rst_template, \
-    main_py_template, test_basic_template, setup_py_template
-from boilerplate_templates.helpers_templates import gitignore_template, \
-    cfg_handler_template, arg_parse_template
-from boilerplate_templates.license_templates import mit_license_template, \
-    apache_license_template, gnu_license_template
-
 from filters.basic_files_filter import BasicFilesFilter
 from filters.helper_filter import HelperFilter
 from filters.license_filter import LicenseFilter
+from filters.web_filter import WebFilter
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -40,9 +33,10 @@ def builder():
     license_handler = LicenseFilter()
     helper_handler = HelperFilter(license_handler)
     basic_files_handler = BasicFilesFilter(helper_handler)
+    web_filter_handler = WebFilter(basic_files_handler)
 
     # start the process
-    basic_files_handler.handle_request(zip_file, request.args)
+    web_filter_handler.handle_request(zip_file, request.args)
 
     # return the warning if there is nothing to zip into
     if in_memory_output_file.len == 0:
@@ -58,7 +52,7 @@ def builder():
     return Response(in_memory_output_file,
                     mimetype='application/zip',
                     headers={
-                        'Content-Disposition': 'attachment;filename=sample.zip'
+                        'Content-Disposition': 'attachment;filename=pythonizr.zip'
                     })
 
 
