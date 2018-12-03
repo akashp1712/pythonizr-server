@@ -44,7 +44,7 @@ class BasicFilesFilter(BaseFilter):
         if 'setup_py' in args:
             add_setup_py(zip_file)
 
-        if 'readme_str' in args:
+        if 'readme_rst' in args:
             add_readme_rst(zip_file)
 
         if 'requirements_txt' in args:
