@@ -38,7 +38,6 @@ def builder():
     # start the process
     web_filter_handler.handle_request(zip_file, request.args)
 
-    print("[" + str(in_memory_output_file) +"]")
     # return the warning if there is nothing to zip into
     if in_memory_output_file.read().decode('UTF-8') == 0:
         # no file to pack
