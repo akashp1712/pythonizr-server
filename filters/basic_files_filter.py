@@ -10,7 +10,15 @@ def add_main_py(zip_file):
 
 # `setup_py` adds a setup.py file with a sample project
 def add_setup_py(zip_file):
-    zip_file.writestr('setup.py', setup_py_template)
+    str_readme = '''with open('README.rst') as f:
+    readme = f.read()'''
+
+    str_license = '''with open('LICENSE.txt') as f:
+    license = f.read()'''
+
+    str_setup_py = setup_py_template.format(str_readme, str_license)
+
+    zip_file.writestr('setup.py', str(str_setup_py))
 
     # sample project and test directories
     zip_file.writestr('sample/__init__.py', '')

@@ -25,11 +25,9 @@ setup_py_template = '''# -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
 
-with open('README.rst') as f:
-    readme = f.read()
+{0}
 
-with open('LICENSE.txt') as f:
-    license = f.read()
+{1}
 
 setup(
     name='sample',
