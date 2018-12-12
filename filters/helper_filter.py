@@ -1,4 +1,4 @@
-from base_filter import BaseFilter
+from filters.base_filter import BaseFilter
 from boilerplate_templates.helpers_templates import gitignore_template, \
     cfg_handler_template, arg_parse_template
 

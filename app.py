@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from io import BytesIO
 from zipfile import ZipFile
 
 from flask import Flask, Response, request, jsonify, make_response
@@ -23,10 +23,10 @@ def not_found(error):
 # `builder` method takes get arguments and packs the files accordingly
 @app.route('/builder', methods=['GET'])
 def builder():
-    # initializing a StringIO object
-    in_memory_output_file = StringIO()
+    # initializing a BytesIO object
+    in_memory_output_file = BytesIO()
 
-    # initializing a ZipFile object with StringIO object as a file
+    # initializing a ZipFile object with BytesIO object as a file
     zip_file = ZipFile(in_memory_output_file, 'w')
 
     # create a filter chain
@@ -38,8 +38,9 @@ def builder():
     # start the process
     web_filter_handler.handle_request(zip_file, request.args)
 
+    print("[" + str(in_memory_output_file) +"]")
     # return the warning if there is nothing to zip into
-    if in_memory_output_file.len == 0:
+    if in_memory_output_file.read().decode('UTF-8') == 0:
         # no file to pack
         zip_file.close()
         return not_found("No file to pack")
@@ -48,7 +49,7 @@ def builder():
     zip_file.close()
     in_memory_output_file.seek(0)
 
-    # return response which is StringIO object packed as a ZipFile
+    # return response which is BytesIO object packed as a ZipFile
     return Response(in_memory_output_file,
                     mimetype='application/zip',
                     headers={

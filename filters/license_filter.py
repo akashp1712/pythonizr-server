@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from base_filter import BaseFilter
+from filters.base_filter import BaseFilter
 from boilerplate_templates.license_templates import mit_license_template, \
     gnu_license_template, apache_license_template
 
