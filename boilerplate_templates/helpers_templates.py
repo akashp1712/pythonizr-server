@@ -109,14 +109,14 @@ cfg_handler_template = '''
                     for use for other modules """
 
 import os
-from ConfigParser import SafeConfigParser
+from configparser import ConfigParser
 
 
 class CfgHandlerError(Exception):
     pass
 
 
-class CfgHandler(SafeConfigParser, object):
+class CfgHandler(ConfigParser, object):
     """
     CfgHandler handles all configuration related task; Reads
     the configuration file and make all configuration parameters
