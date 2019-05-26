@@ -1,7 +1,7 @@
 from io import BytesIO
 from zipfile import ZipFile
 
-from flask import Flask, Response, request, jsonify, make_response
+from flask import Flask, Response, request, jsonify, make_response, render_template
 
 from filters.basic_files_filter import BasicFilesFilter
 from filters.helper_filter import HelperFilter
@@ -19,6 +19,10 @@ app = Flask(__name__)
 def not_found(error):
     return make_response(jsonify({'error': str(error)}), 404)
 
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # `builder` method takes get arguments and packs the files accordingly
 @app.route('/builder', methods=['GET'])
