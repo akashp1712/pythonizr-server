@@ -1,4 +1,4 @@
-# Pythonizr
+# Pythonizr-server (not maintained anymore)
 A Flask application that serves builder api for pythonizr.com
 
 * [Motivation](#motivation)
